@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Волшебная Академия 2 «Б» — Портал</title>
+    <link href="https://googleapis.com" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #130f26;
+            --card-bg: rgba(34, 27, 68, 0.88);
+            --gold: #ffd166;
+            --purple: #9d4edd;
+            --cyan: #4cc9f0;
+            --pink: #f72585;
+            --green: #06d6a0;
+            --text: #ffffff;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Nunito', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body {
+            background: radial-gradient(circle at top, #2b1d52 0%, #130f26 100%);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding-bottom: 50px;
+        }
+        .stars {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;
+            background-image: radial-gradient(2px 2px at 20px 30px, #fff, transparent), radial-gradient(2px 2px at 50px 80px, #ffd166, transparent), radial-gradient(2px 2px at 110px 40px, #4cc9f0, transparent);
+            background-size: 200px 200px; opacity: 0.55; z-index: 0;
+        }
+        .container { position: relative; z-index: 1; max-width: 600px; margin: 0 auto; padding: 16px; }
+        .top-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px);
+            padding: 10px 16px; border-radius: 20px; border: 1px solid rgba(255, 209, 102, 0.35);
+            margin-bottom: 18px;
+        }
+        .class-badge { font-weight: 900; font-size: 1.05rem; color: var(--gold); }
+        .crystals-box {
+            display: flex; align-items: center; gap: 6px; background: rgba(19, 15, 38, 0.8);
+            padding: 6px 14px; border-radius: 14px; font-weight: 800; color: var(--cyan);
+            border: 1px solid var(--cyan); transition: transform 0.2s;
+        }
+        .crystals-box.pop { transform: scale(1.2); }
+        .holiday-banner {
+            background: linear-gradient(90deg, #f72585, #7209b7);
+            border: 2px solid var(--gold); border-radius: 20px; padding: 14px;
+            text-align: center; margin-bottom: 18px; box-shadow: 0 8px 25px rgba(247, 37, 133, 0.4);
+            animation: pulseGlow 2s infinite alternate;
+        }
+        @keyframes pulseGlow { from { box-shadow: 0 4px 15px rgba(247, 37, 133, 0.4); } to { box-shadow: 0 4px 25px rgba(255, 209, 102, 0.7); } }
+        .holiday-title { font-weight: 900; font-size: 1.1rem; color: var(--gold); margin-bottom: 4px; }
+        .confetti-btn {
+            margin-top: 8px; background: var(--gold); color: #130f26; border: none;
+            padding: 6px 14px; border-radius: 12px; font-weight: 800; cursor: pointer;
+        }
+        .hero { text-align: center; margin-bottom: 20px; position: relative; }
+        .mascot-wrap { position: relative; display: inline-block; cursor: pointer; animation: float 3s ease-in-out infinite; }
+        .mascot { font-size: 4.5rem; filter: drop-shadow(0 10px 15px rgba(157, 78, 221, 0.5)); }
+        .mascot-hat { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 2.2rem; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        h1 {
+            font-size: 1.75rem; font-weight: 900; margin: 6px 0;
+            background: linear-gradient(90deg, #ffd166, #ffffff, #4cc9f0);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .ai-card {
+            background: linear-gradient(135deg, rgba(76, 201, 240, 0.18), rgba(34, 27, 68, 0.92));
+            border: 2px solid var(--cyan); border-radius: 22px; padding: 18px; margin-bottom: 20px;
+        }
+        .ai-header { font-weight: 900; color: var(--cyan); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        .ai-input-row { display: flex; gap: 8px; }
+        .ai-input {
+            flex: 1; background: rgba(19, 15, 38, 0.8); border: 1px solid rgba(255,255,255,0.25);
+            color: white; padding: 10px 14px; border-radius: 14px; font-size: 0.95rem; outline: none;
+        }
+        .ai-send {
+            background: var(--cyan); color: #130f26; border: none; padding: 0 16px;
+            border-radius: 14px; font-weight: 900; cursor: pointer;
+        }
+        .ai-reply {
+            margin-top: 12px; background: rgba(19, 15, 38, 0.6); padding: 12px;
+            border-radius: 14px; font-size: 0.95rem; line-height: 1.45; color: #e2dcf5; display: none;
+        }
+        .tabs { display: flex; gap: 8px; margin-bottom: 12px; }
+        .tab-btn {
+            flex: 1; padding: 10px; border-radius: 14px; border: 1px solid var(--purple);
+            background: rgba(34, 27, 68, 0.7); color: #cbbfe8; font-weight: 800; cursor: pointer;
+        }
+        .tab-btn.active { background: var(--purple); color: white; }
+        .game-card {
+            background: linear-gradient(135deg, rgba(157, 78, 221, 0.25), rgba(34, 27, 68, 0.92));
+            border: 2px solid var(--purple); border-radius: 22px; padding: 20px; text-align: center; margin-bottom: 20px;
+        }
+        .task-box { font-size: 2rem; font-weight: 900; margin: 12px 0; letter-spacing: 1px; }
+        .answers-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
+        .ans-btn {
+            background: rgba(255, 255, 255, 0.12); border: 2px solid rgba(255, 255, 255, 0.2);
+            color: white; font-size: 1.25rem; font-weight: 800; padding: 12px 0; border-radius: 14px; cursor: pointer;
+        }
+        .ans-btn.correct { background: var(--green); border-color: var(--green); color: #130f26; }
+        .ans-btn.wrong { background: var(--pink); border-color: var(--pink); }
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .menu-btn {
+            background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px; padding: 18px 12px; text-align: center; color: white;
+            cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 6px;
+        }
+        .menu-btn.vip { border: 2px solid var(--gold); background: linear-gradient(135deg, rgba(255, 209, 102, 0.2), rgba(34, 27, 68, 0.95)); }
+        .menu-icon { font-size: 2rem; }
+        .menu-label { font-weight: 800; font-size: 0.95rem; }
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(10, 7, 22, 0.88); backdrop-filter: blur(6px); z-index: 100;
+            align-items: center; justify-content: center; padding: 16px;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: #221b44; border: 2px solid var(--gold); border-radius: 24px;
+            padding: 22px; width: 100%; max-width: 460px; max-height: 85vh; overflow-y: auto; position: relative;
+        }
+        .close-btn { position: absolute; top: 14px; right: 16px; font-size: 1.6rem; background: none; border: none; color: #cbbfe8; cursor: pointer; }
+        .modal h2 { color: var(--gold); margin-bottom: 12px; font-size: 1.35rem; }
+        .modal p, .modal li { line-height: 1.5; color: #e2dcf5; margin-bottom: 8px; font-size: 0.95rem; }
+        .modal ul { padding-left: 18px; }
+        .shop-item {
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(255,255,255,0.08); padding: 10px 14px; border-radius: 14px; margin-bottom: 10px;
+        }
+        .buy-btn {
+            background: var(--gold); color: #130f26; border: none; padding: 6px 12px;
+            border-radius: 10px; font-weight: 800; cursor: pointer;
+        }
+        .vip-action-btn {
+            display: block; width: 100%; text-align: center; background: linear-gradient(90deg, #ffd166, #f77f00);
+            color: #130f26; font-weight: 900; padding: 12px; border-radius: 14px; border: none;
+            margin-top: 12px; font-size: 1rem; cursor: pointer; text-decoration: none;
+        }
+        #confettiCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 200; }
+    </style>
+</head>
+
+  <body>
+<canvas id="confettiCanvas"></canvas>
+<div class="stars"></div>
+
+<div class="container">
+    <div class="top-bar">
+        <div class="class-badge">✨ АКАДЕМИЯ 2 «Б»</div>
+        <div class="crystals-box" id="crystalBox">💎 <span id="crystalCount">0</span></div>
+    </div>
+
+    <div class="holiday-banner" id="holidayBanner">
+        <div class="holiday-title" id="holidayTitle">🎂 Ближайший праздник: День Рождения Евы (20 марта)!</div>
+        <div style="font-size: 0.9rem;" id="holidayDesc">Вся Академия 2 «Б» готовит волшебные поздравления!</div>
+        <button class="confetti-btn" onclick="launchConfetti()">🎉 Запустить праздничный салют!</button>
+    </div>
+
+    <div class="hero">
+        <div class="mascot-wrap" onclick="launchConfetti()">
+            <div class="mascot-hat" id="owlHat"></div>
+            <div class="mascot">🦉</div>
+        </div>
+        <h1>Волшебная Академия 2 «Б»</h1>
+        <p style="color: #cbbfe8; font-size: 0.95rem;">Учись, играй, копи кристаллы и общайся с ИИ-Совой!</p>
+    </div>
+
+    <div class="ai-card">
+        <div class="ai-header">🤖 Спроси Умную ИИ-Сову (помощь с уроками и загадки)</div>
+        <div class="ai-input-row">
+            <input type="text" class="ai-input" id="aiInput" placeholder="Например: Почему небо голубое?">
+            <button class="ai-send" onclick="askOwl('chat')">Спросить</button>
+        </div>
+        <div class="ai-reply" id="aiReply"></div>
+    </div>
+
+    <div class="tabs">
+        <button class="tab-btn active" id="tabMath" onclick="switchGame('math')">⚡ Умножение</button>
+        <button class="tab-btn" id="tabWords" onclick="switchGame('words')">✍️ Словарные слова</button>
+    </div>
+
+    <div class="game-card">
+        <div style="font-weight: 800; color: var(--gold);" id="gameSubtitle">Реши пример и получи +5 💎</div>
+        <div class="task-box" id="taskBox">2 × 3 = ?</div>
+        <div class="answers-grid" id="answersGrid"></div>
+    </div>
+
+    <div class="menu-grid">
+        <div class="menu-btn vip" onclick="openModal('storyModal')">
+            <span class="menu-icon">📖</span>
+            <span class="menu-label">VIP: Личная ИИ-сказка</span>
+        </div>
+        <div class="menu-btn" onclick="openModal('shopModal')">
+            <span class="menu-icon">🎩</span>
+            <span class="menu-label">Магазин артефактов</span>
+        </div>
+        <div class="menu-btn" onclick="openModal('scheduleModal')">
+            <span class="menu-icon">📜</span>
+            <span class="menu-label">Расписание и звонки</span>
+        </div>
+        <div class="menu-btn" onclick="openModal('parentsModal')">
+            <span class="menu-icon">🛡️</span>
+            <span class="menu-label">Родителям и ДР</span>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="storyModal">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeModal('storyModal')">×</button>
+        <h2>📖 Персональная ИИ-сказка про ребенка</h2>
+        <p>ИИ-Сова сочинит уникальную волшебную историю, где главный герой — ваш ребенок!</p>
+        <input type="text" class="ai-input" id="childNameInput" style="width:100%; margin: 10px 0;" placeholder="Имя ребенка (например: Ева и дракончик)">
+        <button class="vip-action-btn" onclick="generateStory()">✨ Пробная мини-сказка (Бесплатно)</button>
+        <div class="ai-reply" id="storyReply" style="margin-top: 12px;"></div>
+        <hr style="border-color: rgba(255,255,255,0.15); margin: 16px 0;">
+        <p style="font-size: 0.9rem; color: var(--gold);"><strong>💎 Полная книга-сказка (5 глав + иллюстрации): 199 ₽</strong></p>
+        <a href="#pay-link" onclick="alert('Сюда привязывается ваша платежная ссылка ЮKassa / Продамус / Т-Банк!')" class="vip-action-btn" style="background: linear-gradient(90deg, #06d6a0, #4cc9f0);">💳 Заказать полную сказку (199 ₽)</a>
+    </div>
+</div>
+
+<div class="modal" id="shopModal">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeModal('shopModal')">×</button>
+        <h2>🎩 Магазин артефактов Академии</h2>
+        <p>Трать заработанные кристаллы на украшения для Совы!</p>
+        <div class="shop-item">
+            <span>👑 Золотая корона</span>
+            <button class="buy-btn" onclick="buyHat('👑', 15)">15 💎</button>
+        </div>
+        <div class="shop-item">
+            <span>🎓 Шляпа волшебника</span>
+            <button class="buy-btn" onclick="buyHat('🎓', 30)">30 💎</button>
+        </div>
+        <div class="shop-item">
+            <span>🚀 Космический шлем</span>
+            <button class="buy-btn" onclick="buyHat('🚀', 50)">50 💎</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="scheduleModal">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeModal('scheduleModal')">×</button>
+        <h2>📜 Свиток уроков 2 «Б»</h2>
+        <ul>
+            <li><strong>Пн:</strong> Разговоры о важном, Русский, Математика, Чтение</li>
+            <li><strong>Вт:</strong> Математика, Русский, Английский, Физ-ра</li>
+            <li><strong>Ср:</strong> Окр. мир, Русский, Математика, Музыка</li>
+            <li><strong>Чт:</strong> Чтение, Математика, Английский, Технология</li>
+            <li><strong>Пт:</strong> Русский, Окр. мир, Чтение, ИЗО</li>
+        </ul>
+    </div>
+</div>
+
+<div class="modal" id="parentsModal">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeModal('parentsModal')">×</button>
+        <h2>🛡️ Календарь ДР и инфо для родителей</h2>
+        <p><strong>🎂 Именинники 2 «Б»:</strong></p>
+        <ul>
+            <li><strong>Ева</strong> — 20 марта (2018 г.р.) 🎉</li>
+            <li><em>(Пришлите список остальных ребят, и мы добавим всех!)</em></li>
+        </ul>
+        <p style="margin-top: 10px;"><strong>📢 Объявления:</strong></p>
+        <p>В день рождения каждого ученика на главной странице автоматически запускается праздничный салют!</p>
+    </div>
+</div>
+
+<script>
+    let crystals = parseInt(localStorage.getItem('academy2b_crystals')) || 10;
+    let currentHat = localStorage.getItem('academy2b_hat') || '';
+    document.getElementById('crystalCount').innerText = crystals;
+    document.getElementById('owlHat').innerText = currentHat;
+
+    function addCrystals(amount) {
+        crystals += amount;
+        localStorage.setItem('academy2b_crystals', crystals);
+        document.getElementById('crystalCount').innerText = crystals;
+        const box = document.getElementById('crystalBox');
+        box.classList.add('pop');
+        setTimeout(() => box.classList.remove('pop'), 200);
+    }
+
+    function buyHat(hat, cost) {
+        if (crystals >= cost) {
+            addCrystals(-cost);
+            currentHat = hat;
+            localStorage.setItem('academy2b_hat', hat);
+            document.getElementById('owlHat').innerText = hat;
+            launchConfetti();
+            alert('Ура! Новое украшение надето на Сову!');
+        } else {
+            alert('Не хватает кристаллов! Реши еще пару заданий в тренажере.');
+        }
+    }
+
+    const birthdays = [{ name: 'Евы', day: 20, month: 3 }];
+    const today = new Date();
+    const d = today.getDate();
+    const m = today.getMonth() + 1;
+
+    const bdayToday = birthdays.find(b => b.day === d && b.month === m);
+    if (bdayToday) {
+        document.getElementById('holidayTitle').innerText = `🎂 С ДНЁМ РОЖДЕНИЯ, ${bdayToday.name.toUpperCase()}!`;
+        document.getElementById('holidayDesc').innerText = 'Весь 2 «Б» класс и Волшебная Академия поздравляют тебя!';
+        setTimeout(launchConfetti, 800);
+    }
+
+    async function askOwl(mode) {
+        const input = document.getElementById('aiInput');
+        const replyBox = document.getElementById('aiReply');
+        const prompt = input.value.trim();
+        if (!prompt) return;
+
+        replyBox.style.display = 'block';
+        replyBox.innerText = '🦉 Сова листает волшебную книгу...';
+
+        try {
+            const res = await fetch('/api/owl', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt, mode })
+            });
+            const data = await res.json();
+            replyBox.innerText = data.reply;
+            addCrystals(2);
+        } catch (e) {
+            replyBox.innerText = 'Ух-ух! Проверь, добавлен ли ключ GROQ_API_KEY в настройки Vercel.';
+        }
+    }
+
+    async function generateStory() {
+        const name = document.getElementById('childNameInput').value.trim() || 'Ева';
+        const replyBox = document.getElementById('storyReply');
+        replyBox.style.display = 'block';
+        replyBox.innerText = '✨ Сочиняю волшебную сказку про героя: ' + name + '...';
+
+        try {
+            const res = await fetch('/api/owl', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt: `Сочини сказку про ребенка по имени ${name}`, mode: 'story' })
+            });
+            const data = await res.json();
+            replyBox.innerText = data.reply;
+        } catch (e) {
+            replyBox.innerText = 'Магия временно недоступна, попробуй позже!';
+        }
+    }
+
+    let gameMode = 'math';
+    let currentAnswer = '';
+    const dictWords = [
+        { q: 'К_РОВА', a: 'О', opts: ['О', 'А', 'Е'] },
+        { q: 'С_БАКА', a: 'О', opts: ['О', 'А', 'У'] },
+        { q: 'М_ЛОКО', a: 'О', opts: ['О', 'А', 'Ы'] },
+        { q: 'Б_РЁЗА', a: 'Е', opts: ['Е', 'И', 'Я'] },
+        { q: 'В_РОБЕЙ', a: 'О', opts: ['О', 'А', 'Е'] },
+        { q: 'М_ДВЕДЬ', a: 'Е', opts: ['Е', 'И', 'Я'] },
+        { q: 'П_НАЛ', a: 'Е', opts: ['Е', 'И', 'А'] },
+        { q: 'Т_ТРАДЬ', a: 'Е', opts: ['Е', 'И', 'Я'] }
+    ];
+
+    function switchGame(mode) {
+        gameMode = mode;
+        document.getElementById('tabMath').classList.toggle('active', mode === 'math');
+      document.getElementById('tabWords').classList.toggle('active', mode === 'words');
+generateTask();
+}
+function generateTask() {
+const grid = document.getElementById('answersGrid');
+grid.innerHTML = '';
+if (gameMode === 'math') {
+document.getElementById('gameSubtitle').innerText = '⚡ Магия Умножения (+5 💎)';
+const a = Math.floor(Math.random() * 4) + 2;
+const b = Math.floor(Math.random() * 9) + 2;
+currentAnswer = String(a * b);
+document.getElementById('taskBox').innerText = ${a} × ${b} = ?;
+let options = new Set([currentAnswer]);
+while (options.size < 3) {
+let fake = (a * b) + (Math.floor(Math.random() * 7) - 3);
+if (fake > 0) options.add(String(fake));
+}
+Array.from(options).sort(() => Math.random() - 0.5).forEach(opt => createAnsBtn(opt));
+} else {
+document.getElementById('gameSubtitle').innerText = '✍️ Вставь пропущенную букву (+5 💎)';
+const item = dictWords[Math.floor(Math.random() * dictWords.length)];
+currentAnswer = item.a;
+document.getElementById('taskBox').innerText = item.q;
+item.opts.sort(() => Math.random() - 0.5).forEach(opt => createAnsBtn(opt));
+}
+}
+function createAnsBtn(text) {
+const btn = document.createElement('button');
+btn.className = 'ans-btn';
+btn.innerText = text;
+btn.onclick = () => {
+if (text === currentAnswer) {
+btn.classList.add('correct');
+addCrystals(5);
+setTimeout(generateTask, 550);
+} else {
+btn.classList.add('wrong');
+setTimeout(() => btn.classList.remove('wrong'), 400);
+}
+};
+document.getElementById('answersGrid').appendChild(btn);
+}
+function launchConfetti() {
+const canvas = document.getElementById('confettiCanvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+let pieces = Array.from({ length: 80 }, () => ({
+x: Math.random() * canvas.width,
+y: Math.random() * canvas.height - canvas.height,
+r: Math.random() * 6 + 4,
+c: ['#ffd166', '#f72585', '#4cc9f0', '#06d6a0'][Math.floor(Math.random() * 4)],
+v: Math.random() * 4 + 2
+}));
+let frame = 0;
+function draw() {
+ctx.clearRect(0, 0, canvas.width, canvas.height);
+pieces.forEach(p => {
+ctx.fillStyle = p.c;
+ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
+p.y += p.v;
+});
+if (++frame < 120) requestAnimationFrame(draw);
+else ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+draw();
+}
+function openModal(id) { document.getElementById(id).classList.add('active'); }
+function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+generateTask();
